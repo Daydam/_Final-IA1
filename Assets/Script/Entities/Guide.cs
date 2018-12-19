@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,11 +16,18 @@ public class Guide : MonoBehaviour
 
     void Start()
     {
+        //EventManager.Instance.Subscribe(EventID.SCENE_CHANGED, OnSceneChanged);
+
         for (int i = 0; i < steeringBehaviours.Length; i++)
         {
             steeringBehaviours[i].RegisterEntity(transform);
         }
         GameManager.Instance.RegisterTargetSeeker(SetTarget);
+    }
+
+    private void OnSceneChanged(object[] parameterContainer)
+    {
+        if (target != null) SetTarget(target);
     }
 
     void FixedUpdate()

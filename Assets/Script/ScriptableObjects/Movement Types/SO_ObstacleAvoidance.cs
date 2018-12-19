@@ -41,7 +41,7 @@ public class RayConfig
 }
 
 [CreateAssetMenu(fileName = "OA Settings File", menuName = "Scriptable Objects/IA/Obstacle Avoidance/OA Settings File")]
-public class ObstacleAvoidance : SteeringBehaviour
+public class SO_ObstacleAvoidance : SteeringBehaviour
 {
     public float minimumTension;
     public RayConfig[] rayConfigs;
