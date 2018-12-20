@@ -2,104 +2,80 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class RayConfig
-{
-    public Vector3 angle;
-    public float maxDistance;
-    public AnimationCurve intensity;
-    public AnimationCurve rotationIntensity;
-
-    float currentDistance;
-    public float CurrentDistance { get { return currentDistance; } }
-
-    public Vector3 GetEndingPoint(Transform t)
-    {
-        return t.position + GetAngle(t) * currentDistance;
-    }
-
-    public Vector3 GetAngle(Transform t)
-    {
-        Vector3 globalAngle = t.forward * angle.z + t.right * angle.x + t.up * angle.y;
-        return globalAngle.normalized;
-    }
-
-    public float GetIntensity(float dist)
-    {
-        return Mathf.Clamp01(intensity.Evaluate(dist));
-    }
-
-    public float GetRotationIntensity(float dist)
-    {
-        return Mathf.Clamp01(rotationIntensity.Evaluate(dist));
-    }
-
-    public void SetDistance(float currentSpeed)
-    {
-        currentDistance = maxDistance * currentSpeed;
-    }
-}
-
 [CreateAssetMenu(fileName = "OA Settings File", menuName = "Scriptable Objects/IA/Obstacle Avoidance/OA Settings File")]
 public class SO_ObstacleAvoidance : SteeringBehaviour
 {
-    public float minimumTension;
-    public RayConfig[] rayConfigs;
+    public float rayDistance;
+    public AnimationCurve intensityCurve;
+    public float maxTurningSpeed;
+    Ray leftRay;
+    Ray rightRay;
+    int layerMask = 1 << 10;
+    Collider col;
+
+    public override void RegisterEntity(Transform t)
+    {
+        base.RegisterEntity(t);
+        col = entityTransform.GetComponent<Collider>();
+
+        layerMask = ~layerMask;
+        //Print this mask to check it works,maybe? Idk, something's wrong with the activation of this script, it seems.
+    }
 
     override public Vector3 CalculateMovement(Vector3 target)
     {
-        Vector3 movementToAdd = new Vector3();
-        for (int i = 0; i < rayConfigs.Length; i++)
-        {
-            //This is set like this to make it less clumsy while I work on other stuff, it should really be currentSpeed instead of 1
-            rayConfigs[i].SetDistance(1);
-
-            RaycastHit hit = new RaycastHit();
-            if (Physics.Raycast(entityTransform.position, rayConfigs[i].GetAngle(entityTransform), out hit, rayConfigs[i].CurrentDistance))
-            {
-                float dist = hit.distance / rayConfigs[i].CurrentDistance;
-                movementToAdd -= rayConfigs[i].angle.normalized * rayConfigs[i].GetIntensity(dist);
-            }
-        }
-        return movementToAdd;
+        return Vector3.zero;
     }
 
     public override float CalculateRotation()
     {
-        float rotation = 0;
-        for (int i = 0; i < rayConfigs.Length; i++)
-        {
-            //This is set like this to make it less clumsy while I work on other stuff, it should really be currentSpeed instead of 1
-            rayConfigs[i].SetDistance(1);
+        //For some reason this works every 2 launches. Print the rays to check them!
+        float turningAngle = 0;
 
-            RaycastHit hit = new RaycastHit();
-            if (Physics.Raycast(entityTransform.position, rayConfigs[i].GetAngle(entityTransform), out hit, rayConfigs[i].CurrentDistance))
+        leftRay = new Ray(entityTransform.position - entityTransform.right * (col.bounds.size.x / 2),
+            entityTransform.forward);
+        rightRay = new Ray(entityTransform.position + entityTransform.right * (col.bounds.size.x / 2),
+            entityTransform.forward);
+
+        RaycastHit leftHit = new RaycastHit();
+        RaycastHit rightHit = new RaycastHit();
+        if (Physics.Raycast(leftRay, out leftHit, rayDistance, layerMask) && Physics.Raycast(rightRay, out rightHit, rayDistance, layerMask))
+        {
+            if (Vector3.Distance(entityTransform.position, leftHit.point) / rayDistance < Vector3.Distance(entityTransform.position, rightHit.point) / rayDistance)
             {
-                float dist = hit.distance / rayConfigs[i].CurrentDistance;
-                rotation += Vector3.SignedAngle(rayConfigs[i].GetAngle(entityTransform).normalized, entityTransform.forward, Vector3.up) * rayConfigs[i].GetRotationIntensity(dist);
+                turningAngle = maxTurningSpeed * intensityCurve.Evaluate(Vector3.Distance(entityTransform.position, leftHit.point) / rayDistance);
             }
+            else
+            {
+                turningAngle = -maxTurningSpeed * intensityCurve.Evaluate(Vector3.Distance(entityTransform.position, rightHit.point) / rayDistance);
+            }
+            Debug.Log("hit both");
         }
-        return rotation;
+        else if (Physics.Raycast(leftRay, out leftHit, rayDistance, layerMask))
+        {
+            turningAngle = maxTurningSpeed * intensityCurve.Evaluate(Vector3.Distance(entityTransform.position, leftHit.point) / rayDistance);
+            Debug.Log("hit left");
+        }
+        else if (Physics.Raycast(rightRay, out rightHit, rayDistance, layerMask))
+        {
+            turningAngle = -maxTurningSpeed * intensityCurve.Evaluate(Vector3.Distance(entityTransform.position, rightHit.point) / rayDistance);
+            Debug.Log("hit right");
+        }
+        Debug.Log(turningAngle);
+        return turningAngle;
     }
 
     override public void GizmoDraw()
     {
         if (Application.isPlaying)
         {
-            for (int i = 0; i < rayConfigs.Length; i++)
-            {
-                RaycastHit hit = new RaycastHit();
-                if (Physics.Raycast(entityTransform.position, rayConfigs[i].GetAngle(entityTransform), out hit, rayConfigs[i].CurrentDistance))
-                {
-                    float dist = hit.distance / rayConfigs[i].CurrentDistance;
-                    Gizmos.color = Color.Lerp(Color.green, Color.red, rayConfigs[i].GetIntensity(dist));
-                }
-                else
-                {
-                    Gizmos.color = Color.green;
-                }
-                Gizmos.DrawLine(entityTransform.position, rayConfigs[i].GetEndingPoint(entityTransform));
-            }
+            Gizmos.color = Physics.Raycast(rightRay, rayDistance) ? Color.red : Color.green;
+            Gizmos.DrawLine(entityTransform.position + entityTransform.right * (col.bounds.size.x / 2),
+                entityTransform.position + entityTransform.right * (col.bounds.size.x / 2) + entityTransform.forward * rayDistance);
+
+            Gizmos.color = Physics.Raycast(leftRay, rayDistance) ? Color.red : Color.green;
+            Gizmos.DrawLine(entityTransform.position - entityTransform.right * (col.bounds.size.x / 2),
+                entityTransform.position - entityTransform.right * (col.bounds.size.x / 2) + entityTransform.forward * rayDistance);
         }
     }
 }

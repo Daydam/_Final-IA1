@@ -4,6 +4,23 @@ using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour
 {
+    private static DungeonGenerator instance;
+    public static DungeonGenerator Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<DungeonGenerator>();
+                if (instance == null)
+                {
+                    instance = new GameObject("new DungeonGenerator Object").AddComponent<DungeonGenerator>().GetComponent<DungeonGenerator>();
+                }
+            }
+            return instance;
+        }
+    }
+
     public Guide guide;
     public Room prefab;
     public int width;

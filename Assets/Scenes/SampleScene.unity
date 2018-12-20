@@ -321,8 +321,7 @@ GameObject:
   - component: {fileID: 1375344774}
   - component: {fileID: 1375344773}
   - component: {fileID: 1375344778}
-  - component: {fileID: 1375344779}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -340,8 +339,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0707f993cc77f8b4ab8c0b413300e67d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
-  rotationSpeed: 0
+  movementSpeed: 3
+  rotationSpeed: 270
   mainMovementPriority: 1
   steeringBehaviours:
   - {fileID: 11400000, guid: c5e80692d53fe404388c2a5c540296df, type: 2}
@@ -426,34 +425,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &1375344779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1375344772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d6c7200297ef2f468bd5ff96eb6bac4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rayDistance: 2
-  intensityCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 0.004743576
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  maxTurningSpeed: 90

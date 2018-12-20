@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Guide : MonoBehaviour
 {
+    DungeonGenerator dg;
+
     public float movementSpeed;
     public float rotationSpeed;
     public float mainMovementPriority;
@@ -43,9 +45,11 @@ public class Guide : MonoBehaviour
         var nextNode = path.Peek();
         var nextPos = new Vector3(nextNode.Position.x, transform.position.y, nextNode.Position.z);
 
-        if ((nextPos - transform.position).magnitude < movementSpeed * Time.deltaTime)
+        float presenceFactor = path.Count > 1 ? 0.4f : 0.1f;
+
+        if ((nextPos - transform.position).magnitude < Mathf.Min(DungeonGenerator.Instance.prefab.size.x, DungeonGenerator.Instance.prefab.size.y) * presenceFactor)
         {
-            transform.position = nextPos;
+            //transform.position = nextPos;
             Current = path.Pop();
         }
         else
@@ -53,7 +57,8 @@ public class Guide : MonoBehaviour
             Vector3 movementModifier = new Vector3();
             float rotationModifier = 0;
 
-            movementModifier += (nextPos - transform.position).normalized * mainMovementPriority;
+            //movementModifier += (nextPos - transform.position).normalized * mainMovementPriority;
+            movementModifier += transform.forward * mainMovementPriority;
             rotationModifier += Vector3.SignedAngle(transform.forward, (nextPos - transform.position).normalized, Vector3.up);
 
             for (int i = 0; i < steeringBehaviours.Length; i++)

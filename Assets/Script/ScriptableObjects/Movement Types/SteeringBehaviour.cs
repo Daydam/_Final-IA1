@@ -9,7 +9,7 @@ public class SteeringBehaviour : ScriptableObject
     public float Priority { get { return priority; } }
 	public bool allowsRotation;
 
-	public void RegisterEntity(Transform t)
+	public virtual void RegisterEntity(Transform t)
 	{
 		entityTransform = t;
 	}
