@@ -13,5 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   allowsRotation: 0
-  minimumTension: 0.8
+  minimumTension: 0
   rayConfigs: []

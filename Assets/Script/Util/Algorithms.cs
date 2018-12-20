@@ -153,7 +153,7 @@ public class Algorithms
 
         path.Push(goal);
 
-        while(parents.ContainsKey(current))
+        while (parents.ContainsKey(current) && parents.ContainsKey(parents[current]))
         {
             path.Push(parents[current]);
             current = parents[current];

@@ -83,6 +83,8 @@ public class Guide : MonoBehaviour
                 }
                 return arcs;
             });
+
+        transform.LookAt(new Vector3(path.Peek().Position.x, transform.position.y, path.Peek().Position.z), Vector3.up);
     }
 
     void OnDrawGizmos()
