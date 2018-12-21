@@ -11,5 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6ca63930a346441be6673a1a494b5f, type: 3}
   m_Name: Separation
   m_EditorClassIdentifier: 
-  priority: 1
+  priority: 0.3
   allowsRotation: 0
+  maxDistance: 0.7

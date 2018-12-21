@@ -18,7 +18,7 @@ public class Guide : MonoBehaviour
 
     void Start()
     {
-        //EventManager.Instance.Subscribe(EventID.SCENE_CHANGED, OnSceneChanged);
+        EventManager.Instance.Subscribe(EventID.SCENE_CHANGED, OnSceneChanged);
 
         for (int i = 0; i < steeringBehaviours.Length; i++)
         {

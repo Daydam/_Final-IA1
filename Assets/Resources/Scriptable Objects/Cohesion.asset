@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 749c0b4e685ad3441a6c955309d0cd0b, type: 3}
   m_Name: Cohesion
   m_EditorClassIdentifier: 
-  priority: 0
-  allowsRotation: 0
+  priority: 0.1
+  allowsRotation: 1
