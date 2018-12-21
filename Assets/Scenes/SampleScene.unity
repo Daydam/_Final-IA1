@@ -340,9 +340,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 3
-  rotationSpeed: 270
+  rotationSpeed: 540
   mainMovementPriority: 1
   steeringBehaviours:
+  - {fileID: 11400000, guid: c1a96f87a8cca3c4fa345489079c556f, type: 2}
   - {fileID: 11400000, guid: c5e80692d53fe404388c2a5c540296df, type: 2}
 --- !u!23 &1375344774
 MeshRenderer:

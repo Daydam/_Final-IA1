@@ -19,7 +19,7 @@ public class SteeringBehaviour : ScriptableObject
 		return Vector3.zero;
 	}
 
-	public virtual float CalculateRotation()
+	public virtual float CalculateRotation(Vector3 target, float maxTurningSpeed)
 	{
 		return 0;
 	}

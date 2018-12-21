@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3da8e423773304ba7d75251ea0eb66, type: 3}
-  m_Name: Obstacle Avoidance Test
+  m_Name: Obstacle Avoidance
   m_EditorClassIdentifier: 
-  priority: 2
+  priority: 3
   allowsRotation: 1
   rayDistance: 1
   intensityCurve:
@@ -32,4 +32,3 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  maxTurningSpeed: 180
