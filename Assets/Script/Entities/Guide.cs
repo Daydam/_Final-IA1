@@ -9,10 +9,12 @@ public class Guide : MonoBehaviour
     public float rotationSpeed;
     public float mainMovementPriority;
     public SteeringBehaviour[] steeringBehaviours;
+    Rigidbody rb;
 
     public RoomNode Current { get; set; }
     RoomNode target;
     Stack<RoomNode> path;
+    public Stack<RoomNode> Path { get { return path; } }
 
     void Start()
     {
@@ -20,9 +22,12 @@ public class Guide : MonoBehaviour
 
         for (int i = 0; i < steeringBehaviours.Length; i++)
         {
+            steeringBehaviours[i] = Instantiate(steeringBehaviours[i]);
             steeringBehaviours[i].RegisterEntity(transform);
         }
         GameManager.Instance.RegisterTargetSeeker(SetTarget);
+
+        rb = GetComponent<Rigidbody>();
     }
 
     private void OnSceneChanged(object[] parameterContainer)
@@ -32,6 +37,7 @@ public class Guide : MonoBehaviour
 
     void FixedUpdate()
     {
+        rb.velocity = Vector3.zero;
         if(path != null && path.Count > 0)
         {
             Walk();
@@ -76,6 +82,7 @@ public class Guide : MonoBehaviour
             movementModifier.Normalize();
             transform.RotateAround(transform.position, Vector3.up, Mathf.Sign(rotationModifier) * Mathf.Min(Mathf.Abs(rotationModifier), rotationSpeed) * rotationSpeed * Time.deltaTime);
             transform.position += movementModifier * movementSpeed * Time.deltaTime;
+            //rb.MovePosition(transform.position + movementModifier * movementSpeed * Time.deltaTime);
         }
     }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "OA Settings File", menuName = "Scriptable Objects/IA/Steering Behaviours/Seek")]
+[CreateAssetMenu(fileName = "Seek Settings File", menuName = "Scriptable Objects/IA/Steering Behaviours/Seek")]
 public class SO_Seek : SteeringBehaviour
 {
     public override Vector3 CalculateMovement(Vector3 target)

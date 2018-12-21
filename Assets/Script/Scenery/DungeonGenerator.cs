@@ -22,6 +22,7 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     public Guide guide;
+    public Group followerGroup;
     public Room prefab;
     public int width;
     public int length;
@@ -58,6 +59,7 @@ public class DungeonGenerator : MonoBehaviour
         rooms = Algorithms.DFS(initialRoom, Room.ProcessRoom, Room.Explode);
         guide.Current = initialRoom.Node;
         guide.transform.position = initialRoom.transform.position + Vector3.up;
+        followerGroup.transform.position = initialRoom.transform.position + Vector3.up;
     }
 
     void DestroyRooms()

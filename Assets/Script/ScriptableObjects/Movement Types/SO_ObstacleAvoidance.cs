@@ -28,7 +28,6 @@ public class SO_ObstacleAvoidance : SteeringBehaviour
 
     public override float CalculateRotation(Vector3 target, float maxTurningSpeed)
     {
-        //For some reason this works every 2 launches. Print the rays to check them!
         float turningAngle = 0;
 
         leftRay = new Ray(entityTransform.position - entityTransform.right * (col.bounds.size.x / 2),
