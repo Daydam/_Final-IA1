@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3da8e423773304ba7d75251ea0eb66, type: 3}
   m_Name: Obstacle Avoidance Test
   m_EditorClassIdentifier: 
-  priority: 1
+  priority: 2
   allowsRotation: 1
   rayDistance: 1
   intensityCurve:

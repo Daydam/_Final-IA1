@@ -60,11 +60,18 @@ public class Guide : MonoBehaviour
             //movementModifier += (nextPos - transform.position).normalized * mainMovementPriority;
             movementModifier += transform.forward * mainMovementPriority;
             rotationModifier += Vector3.SignedAngle(transform.forward, (nextPos - transform.position).normalized, Vector3.up);
+            int rotationModAmount = 0;
 
             for (int i = 0; i < steeringBehaviours.Length; i++)
             {
                 movementModifier += steeringBehaviours[i].CalculateMovement(new Vector3(target.Position.x, transform.position.y, target.Position.z)).normalized * steeringBehaviours[i].Priority;
-                rotationModifier += steeringBehaviours[i].CalculateRotation();
+                float rotationAmount = steeringBehaviours[i].CalculateRotation();
+                if(Mathf.Abs(rotationAmount) != 0)
+                {
+                    rotationModifier += rotationAmount;
+                    rotationModAmount++;
+                    //Saco promedio o no? mmm...
+                }
             }
 
             movementModifier.Normalize();

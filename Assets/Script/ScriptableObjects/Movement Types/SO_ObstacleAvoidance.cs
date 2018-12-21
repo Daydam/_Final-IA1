@@ -61,8 +61,7 @@ public class SO_ObstacleAvoidance : SteeringBehaviour
             turningAngle = -maxTurningSpeed * intensityCurve.Evaluate(Vector3.Distance(entityTransform.position, rightHit.point) / rayDistance);
             Debug.Log("hit right");
         }
-        Debug.Log(turningAngle);
-        return turningAngle;
+        return turningAngle * priority;
     }
 
     override public void GizmoDraw()
